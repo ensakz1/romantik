@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Tuğçe'ye Özel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #ffe6f0;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      font-family: 'Dancing Script', cursive;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      text-align: center;
+      position: relative;
+    }
+
+    .main-text {
+      font-size: 40px;
+      color: #e60073;
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+      text-shadow: 2px 2px 4px #ff99cc;
+    }
+
+    .sub-text {
+      font-size: 18px;
+      color: #b30059;
+      margin-top: 8px;
+      z-index: 2;
+    }
+
+    .heart {
+      color: #ff3366;
+      font-size: 56px;
+      margin-top: 25px;
+      animation: heartbeat 1s infinite;
+      display: none;
+      z-index: 2;
+      text-shadow: 2px 2px 6px #ff99cc;
+    }
+
+    @keyframes heartbeat {
+      0% { transform: scale(1); }
+      25% { transform: scale(1.3); }
+      50% { transform: scale(1); }
+      75% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+
+    /* Arka planda yağmur gibi kalpler */
+    .falling-heart {
+      position: absolute;
+      top: -50px;
+      color: #ff66a3;
+      font-size: 24px;
+      animation: fall linear infinite;
+      opacity: 0.8;
+      z-index: 1;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Patlayan küçük kalpler */
+    .pop-heart {
+      position: absolute;
+      font-size: 20px;
+      color: #ff3385;
+      animation: pop 1s forwards;
+      opacity: 0;
+      z-index: 3;
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(0) translate(0, 0);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1.5) translate(var(--x), var(--y));
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-text" id="mainText">💖 Tuğçe napıyosun 💖</div>
+  <div class="sub-text">üstüne bass</div>
+  <div class="heart" id="heart">💗 Muuaahhh 💗</div>
+
+  <script>
+    const mainText = document.getElementById('mainText');
+    const heart = document.getElementById('heart');
+    const subText = document.querySelector('.sub-text');
+
+    mainText.addEventListener('click', (e) => {
+      mainText.style.display = 'none';
+      subText.style.display = 'none';
+      heart.style.display = 'block';
+      createPopHearts(e.clientX, e.clientY);
+    });
+
+    // Arka planda yağmur gibi kalpler
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('falling-heart');
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (2 + Math.random() * 3) + 's';
+      heart.innerText = '💖';
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 5000);
+    }
+
+    setInterval(createHeart, 300);
+
+    // Tıklamada patlayan kalpler
+    function createPopHearts(x, y) {
+      for (let i = 0; i < 15; i++) {
+        const pop = document.createElement('div');
+        pop.classList.add('pop-heart');
+        pop.innerText = '💖';
+        pop.style.left = x + 'px';
+        pop.style.top = y + 'px';
+        const angle = Math.random() * 2 * Math.PI;
+        const radius = Math.random() * 100 + 50;
+        pop.style.setProperty('--x', `${Math.cos(angle) * radius}px`);
+        pop.style.setProperty('--y', `${Math.sin(angle) * radius}px`);
+        document.body.appendChild(pop);
+
+        setTimeout(() => {
+          pop.remove();
+        }, 1000);
+      }
+    }
+  </script>
+
+</body>
+</html>
